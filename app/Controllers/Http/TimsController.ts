@@ -5,19 +5,15 @@ import Tim from "App/Models/Tim";
 export default class TimsController {
   public async index({ request, response }: HttpContextContract) {
     try {
-      const tims = await Tim.query();
-
-      return response.status(200).json(tims);
+      const page = request.input("page", 1);
+      return await Tim.query().where("dihapus", 0).paginate(page, 50);
     } catch (error) {
-      return response.status(404).json({
-        message: error.message,
-      });
+      return response.notFound(error);
     }
   }
 
   public async store({ request, response }: HttpContextContract) {
     try {
-      const tim = new Tim();
       const logoTim = request.file("logo", {
         size: "2mb",
         extnames: ["jpg", "png", "jpeg", "svg"],
@@ -25,88 +21,102 @@ export default class TimsController {
 
       await logoTim?.move(Application.publicPath("foto/logoTim"));
 
-      const logo = `${logoTim?.fileName?.toLowerCase()}-${new Date()
-        .getTime()
-        .toString()}.${logoTim?.extname}`;
+      const logo = `${logoTim?.fileName?.toLowerCase()}-${
+        new Date().getTime() + ""
+      }.${logoTim?.extname}`;
 
-      tim.nama = request.input("nama_tim");
-      tim.asalInstansi = request.input("asal_instansi");
-      tim.deskripsi = request.input("deskripsi");
-      tim.userId = request.input("userId");
-      tim.logo = `foto/logoTim/${logo}`;
-
-      await tim.save();
-
-      return response.status(201).json({
-        message: "berhasil",
-        data: tim,
+      const {
+        nama_tim,
+        asal_instansi,
+        deskripsi,
+        user_id,
+        provinsi,
+        wilayah,
+        website,
+        facebook,
+        twitter,
+        instagram,
+        youtube,
+        tiktok,
+      } = request.body();
+      return await Tim.create({
+        nama: nama_tim,
+        asalInstansi: asal_instansi,
+        deskripsi: deskripsi,
+        userId: user_id,
+        logo: `foto/logoTim/${logo}`,
+        provinsi: provinsi,
+        wilayah: wilayah,
+        website: website,
+        facebook: facebook,
+        twitter: twitter,
+        instagram: instagram,
+        youtube: youtube,
+        tiktok: tiktok,
       });
     } catch (error) {
-      return response.status(404).json({
-        message: error.message,
-      });
+      return response.badRequest(error);
     }
   }
 
-  public async show({ response, params }: HttpContextContract) {
-    try {
-      const tim = await Tim.query().where("id", params.id).preload("pemains");
-
-      return response.status(200).json({
-        success: true,
-        data: tim,
-      });
-    } catch (error) {
-      return response.status(404).json({
-        message: error.message,
-      });
-    }
+  public async show({ params: { id } }: HttpContextContract) {
+    return await Tim.query().where({ id }).firstOrFail();
   }
 
-  public async update({ request, response, params }: HttpContextContract) {
+  public async update({
+    request,
+    response,
+    params: { id },
+  }: HttpContextContract) {
     try {
-      const tim = await Tim.findByOrFail("id", params.id);
       const logoTim = request.file("logo", {
         size: "2mb",
         extnames: ["jpg", "gif", "png"],
       });
-
       await logoTim?.move(Application.publicPath("foto/logoTim"));
-      const logo = `${logoTim?.fileName?.toLowerCase()}-${new Date()
-        .getTime()
-        .toString()}.${logoTim?.extname}`;
-      tim.nama = request.input("nama");
-      tim.asalInstansi = request.input("asalInstansi");
-      tim.deskripsi = request.input("deskripsi");
-      tim.logo = `foto/logoTim/${logo}`;
+      const logo = `${logoTim?.fileName?.toLowerCase()}-${
+        new Date().getTime() + ""
+      }.${logoTim?.extname}`;
 
-      await tim.save();
-
-      return response.status(200).json({
-        success: true,
-        data: tim,
-      });
+      const {
+        nama_tim,
+        asal_instansi,
+        deskripsi,
+        user_id,
+        provinsi,
+        wilayah,
+        website,
+        facebook,
+        twitter,
+        instagram,
+        youtube,
+        tiktok,
+      } = request.body();
+      return await Tim.query()
+        .where({ id })
+        .update({
+          nama: nama_tim,
+          asalInstansi: asal_instansi,
+          deskripsi: deskripsi,
+          userId: user_id,
+          logo: `foto/logoTim/${logo}`,
+          provinsi: provinsi,
+          wilayah: wilayah,
+          website: website,
+          facebook: facebook,
+          twitter: twitter,
+          instagram: instagram,
+          youtube: youtube,
+          tiktok: tiktok,
+        });
     } catch (error) {
-      return response.status(404).json({
-        message: error.message,
-      });
+      return response.notFound(error);
     }
   }
 
-  public async destroy({ response, params }: HttpContextContract) {
-    try {
-      const tim = await Tim.findByOrFail("id", params.id);
-
-      await tim.delete();
-
-      return response.status(200).json({
-        success: true,
-        data: tim,
-      });
-    } catch (error) {
-      return response.status(404).json({
-        message: error.message,
-      });
-    }
+  public async destroy({ params: { id } }: HttpContextContract) {
+    return await Tim.query().where({ id }).update({
+      dihapus: 1,
+    });
   }
 }
