@@ -4,31 +4,52 @@ import Tim from './Tim'
 
 export default class Pemain extends BaseModel {
   @column({ isPrimary: true })
-  public id: number
+  public id: number;
 
   @column()
-  public posisi: string
+  public posisi: string;
 
   @column()
-  public nomorPunggung: string
+  public nomorPunggung: string;
 
   @column()
-  public foto?: string
+  public foto?: string;
 
   @column()
-  public userId: number
+  public userId: number;
   
   @column()
-  public timId: number
+  public timId: number;
+
+  @column()
+  public facebook: string;
+
+  @column()
+  public twitter: string;
+
+  @column()
+  public instagram: string;
+
+  @column()
+  public youtube: string;
+
+  @column()
+  public tiktok: string;
 
   @belongsTo(() => Tim, {
-    localKey: "id"
+    localKey: "id",
   })
-  public tims: BelongsTo<typeof Tim>
+  public tims: BelongsTo<typeof Tim>;
   
   @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+  public createdAt: DateTime;
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+  validated: Promise<{
+    nama: string;
+    asalInstansi: string;
+    deskripsi: string | undefined;
+  }>;
+  tim: { nama: string; asalInstansi: string; deskripsi: string | undefined };
 }
