@@ -13,6 +13,12 @@ export default class Pemain extends BaseModel {
   public nomorPunggung: string;
 
   @column()
+  public nickname: string;
+
+  @column()
+  public deskripsi: string;
+
+  @column()
   public foto?: string;
 
   @column()
@@ -47,9 +53,10 @@ export default class Pemain extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
   validated: Promise<{
-    nama: string;
-    asalInstansi: string;
-    deskripsi: string | undefined;
+    posisi: string;
+    nomorPunggung: string;
+    nickname: string;
+    deskripsi: string;
   }>;
-  tim: { nama: string; asalInstansi: string; deskripsi: string | undefined };
+  pemain: { posisi: string; nomorPunggung: string; nickname: string; deskripsi: string };
 }

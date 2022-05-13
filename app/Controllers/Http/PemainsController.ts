@@ -17,6 +17,8 @@ export default class PemainsController {
             const {
                 posisi, 
                 nomor_punggung, 
+                nickname,
+                deskripsi,
                 user_id,
                 facebook,
                 twitter,
@@ -37,6 +39,8 @@ export default class PemainsController {
             return await Pemain.create({
                 posisi: posisi,
                 nomorPunggung: nomor_punggung,
+                nickname: nickname,
+                deskripsi: deskripsi,
                 userId: user_id,
                 timId: tim_id,
                 foto: `foto/fotoPemain/${fotoPemain}`,
