@@ -64,6 +64,8 @@ export default class PemainsController {
             const {
                 posisi, 
                 nomor_punggung, 
+                nickname,
+                deskripsi,
                 facebook,
                 twitter,
                 instagram,
@@ -83,6 +85,8 @@ export default class PemainsController {
             return await Pemain.query().where({id}).update({
                 posisi: posisi,
                 nomorPunggung: nomor_punggung,
+                nickname: nickname,
+                deskripsi: deskripsi,
                 foto: `foto/fotoPemain/${fotoPemain}`,
                 facebook: facebook,
                 twitter: twitter,
