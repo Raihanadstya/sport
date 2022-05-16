@@ -10,9 +10,13 @@ export default class Pemain extends BaseModel {
   public posisi: string;
 
   @column()
-  public nickname: string;
-  @column()
   public nomorPunggung: string;
+
+  @column()
+  public nickname: string;
+
+  @column()
+  public deskripsi: string;
 
   @column()
   public foto?: string;
@@ -22,6 +26,21 @@ export default class Pemain extends BaseModel {
 
   @column()
   public timId: number;
+
+  @column()
+  public facebook: string;
+
+  @column()
+  public twitter: string;
+
+  @column()
+  public instagram: string;
+
+  @column()
+  public youtube: string;
+
+  @column()
+  public tiktok: string;
 
   @belongsTo(() => Tim, {
     localKey: "id",
@@ -33,4 +52,16 @@ export default class Pemain extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime;
+  validated: Promise<{
+    posisi: string;
+    nomorPunggung: string;
+    nickname: string;
+    deskripsi: string;
+  }>;
+  pemain: {
+    posisi: string;
+    nomorPunggung: string;
+    nickname: string;
+    deskripsi: string;
+  };
 }
