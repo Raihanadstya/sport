@@ -60,7 +60,7 @@ export default class TimsController {
   }
 
   public async show({ params: { id } }: HttpContextContract) {
-    return await Tim.query().where({ id }).firstOrFail();
+    return await Tim.query().preload("pemain").where({ id }).firstOrFail();
   }
 
   public async update({

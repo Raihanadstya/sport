@@ -6,6 +6,7 @@ export default class Tims extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments("id").primary();
+      table.string("nama_tebal", 150).notNullable();
       table.string("nama", 150).notNullable();
       table.string("asal_instansi", 100).notNullable();
       table.text("deskripsi").nullable();

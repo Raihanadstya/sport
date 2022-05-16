@@ -7,6 +7,9 @@ export default class Tim extends BaseModel {
   public id: number;
 
   @column()
+  public namaTebal: string;
+
+  @column()
   public nama: string;
 
   @column()
@@ -61,4 +64,7 @@ export default class Tim extends BaseModel {
     deskripsi: string | undefined;
   }>;
   tim: { nama: string; asalInstansi: string; deskripsi: string | undefined };
+
+  @hasMany(() => Pemain, { localKey: "id", foreignKey: "timId" })
+  public pemain: HasMany<typeof Pemain>;
 }

@@ -1,34 +1,36 @@
-import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
-import Tim from './Tim'
+import { DateTime } from "luxon";
+import { BaseModel, BelongsTo, belongsTo, column } from "@ioc:Adonis/Lucid/Orm";
+import Tim from "./Tim";
 
 export default class Pemain extends BaseModel {
   @column({ isPrimary: true })
-  public id: number
+  public id: number;
 
   @column()
-  public posisi: string
+  public posisi: string;
 
   @column()
-  public nomorPunggung: string
+  public nickname: string;
+  @column()
+  public nomorPunggung: string;
 
   @column()
-  public foto?: string
+  public foto?: string;
 
   @column()
-  public userId: number
-  
+  public userId: number;
+
   @column()
-  public timId: number
+  public timId: number;
 
   @belongsTo(() => Tim, {
-    localKey: "id"
+    localKey: "id",
   })
-  public tims: BelongsTo<typeof Tim>
-  
+  public tims: BelongsTo<typeof Tim>;
+
   @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+  public createdAt: DateTime;
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
+  public updatedAt: DateTime;
 }
