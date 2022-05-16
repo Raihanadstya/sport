@@ -3,75 +3,61 @@ import Application from "@ioc:Adonis/Core/Application";
 import Pemain from "App/Models/Pemain";
 
 export default class PemainsController {
-    public async index({ request, response }: HttpContextContract) {
-        try {
-            const page = request.input("page", 1);
-            return await Pemain.query().paginate(page, 50);
-        } catch (error) {
-            return response.notFound(error);
-        }
-    }
-
-    public async store({ request, response, params:{tim_id} }: HttpContextContract) {
-        try {
-            const {
-                posisi, 
-                nomor_punggung, 
-                nickname,
-                deskripsi,
-                user_id,
-                facebook,
-                twitter,
-                instagram,
-                youtube,
-                tiktok,
-            } = request.body();
-
-            const foto = request.file('foto',{
-                size: '2mb',
-                extnames: ['jpg', 'png', 'jpeg', 'svg'],
-            }); 
-
-            await foto?.move(Application.publicPath('foto/fotoPemain'));
-
-            const fotoPemain = `${foto?.fileName?.toLowerCase()}-${new Date().getTime()+ ""}.${foto?.extname}`;
-
-            return await Pemain.create({
-                posisi: posisi,
-                nomorPunggung: nomor_punggung,
-                nickname: nickname,
-                deskripsi: deskripsi,
-                userId: user_id,
-                timId: tim_id,
-                foto: `foto/fotoPemain/${fotoPemain}`,
-                facebook: facebook,
-                twitter: twitter,
-                instagram: instagram,
-                youtube: youtube,
-                tiktok: tiktok,
-            });
-        } catch (error) {
-            return response.badRequest(error);
-        }
+  public async index({ request, response }: HttpContextContract) {
+    try {
+      const page = request.input("page", 1);
+      return await Pemain.query().paginate(page, 50);
+    } catch (error) {
+      return response.notFound(error);
     }
   }
 
-  public async store({ request, response, params }: HttpContextContract) {
+  public async store({
+    request,
+    response,
+    params: { tim_id },
+  }: HttpContextContract) {
     try {
-      const pemain = new Pemain();
-      const input = request.only(["posisi", "nomor_punggung", "userId"]);
+      const {
+        posisi,
+        nomor_punggung,
+        nickname,
+        deskripsi,
+        user_id,
+        facebook,
+        twitter,
+        instagram,
+        youtube,
+        tiktok,
+      } = request.body();
+
       const foto = request.file("foto", {
         size: "2mb",
         extnames: ["jpg", "png", "jpeg", "svg"],
       });
+
       await foto?.move(Application.publicPath("foto/fotoPemain"));
 
-      const fotoPemain = `${foto?.fileName?.toLowerCase()}-${new Date()
-        .getTime()
-        .toString()}.${foto?.extname}`;
+      const fotoPemain = `${foto?.fileName?.toLowerCase()}-${
+        new Date().getTime() + ""
+      }.${foto?.extname}`;
 
-    public async show({params:{id} }: HttpContextContract) {
-        return await Pemain.query().where({id}).firstOrFail();
+      return await Pemain.create({
+        posisi: posisi,
+        nomorPunggung: nomor_punggung,
+        nickname: nickname,
+        deskripsi: deskripsi,
+        userId: user_id,
+        timId: tim_id,
+        foto: `foto/fotoPemain/${fotoPemain}`,
+        facebook: facebook,
+        twitter: twitter,
+        instagram: instagram,
+        youtube: youtube,
+        tiktok: tiktok,
+      });
+    } catch (error) {
+      return response.badRequest(error);
     }
   }
 
@@ -79,57 +65,57 @@ export default class PemainsController {
     return await Pemain.query().where({ id }).firstOrFail();
   }
 
-    public async update({ request, response, params: {id} }: HttpContextContract) {
-        try {
-            const {
-                posisi, 
-                nomor_punggung, 
-                nickname,
-                deskripsi,
-                facebook,
-                twitter,
-                instagram,
-                youtube,
-                tiktok,
-            } = request.body();
+  public async update({
+    request,
+    response,
+    params: { id },
+  }: HttpContextContract) {
+    try {
+      const {
+        posisi,
+        nomor_punggung,
+        nickname,
+        deskripsi,
+        facebook,
+        twitter,
+        instagram,
+        youtube,
+        tiktok,
+      } = request.body();
 
-            const foto = request.file('foto',{
-                size: '2mb',
-                extnames: ['jpg', 'png', 'jpeg', 'svg'],
-            }); 
+      const foto = request.file("foto", {
+        size: "2mb",
+        extnames: ["jpg", "png", "jpeg", "svg"],
+      });
 
-            await foto?.move(Application.publicPath('foto/fotoPemain'));
+      await foto?.move(Application.publicPath("foto/fotoPemain"));
 
-            const fotoPemain = `${foto?.fileName?.toLowerCase()}-${new Date().getTime()+ ""}.${foto?.extname}`;
+      const fotoPemain = `${foto?.fileName?.toLowerCase()}-${
+        new Date().getTime() + ""
+      }.${foto?.extname}`;
 
-            return await Pemain.query().where({id}).update({
-                posisi: posisi,
-                nomorPunggung: nomor_punggung,
-                nickname: nickname,
-                deskripsi: deskripsi,
-                foto: `foto/fotoPemain/${fotoPemain}`,
-                facebook: facebook,
-                twitter: twitter,
-                instagram: instagram,
-                youtube: youtube,
-                tiktok: tiktok,
-            });
-        } catch (error) {
-            return response.notFound(error);
-        }
+      return await Pemain.query()
+        .where({ id })
+        .update({
+          posisi: posisi,
+          nomorPunggung: nomor_punggung,
+          nickname: nickname,
+          deskripsi: deskripsi,
+          foto: `foto/fotoPemain/${fotoPemain}`,
+          facebook: facebook,
+          twitter: twitter,
+          instagram: instagram,
+          youtube: youtube,
+          tiktok: tiktok,
+        });
+    } catch (error) {
+      return response.notFound(error);
     }
   }
 
-  public async destroy({ response, params }: HttpContextContract) {
-    try {
-      const pemain = await Pemain.findByOrFail("id", params);
-
-      await pemain.delete();
-
-    public async destroy({params: {id} }: HttpContextContract) {
-        return await Pemain.query().where({ id }).update({
-            dihapus: 1,
-          });
-    }
+  public async destroy({ params: { id } }: HttpContextContract) {
+    return await Pemain.query().where({ id }).update({
+      dihapus: 1,
+    });
   }
 }
