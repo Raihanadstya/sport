@@ -61,7 +61,7 @@ export default class PemainsController {
     }
   }
 
-  public async show({ response, params: { id } }: HttpContextContract) {
+  public async show({ params: { id } }: HttpContextContract) {
     return await Pemain.query().where({ id }).firstOrFail();
   }
 
