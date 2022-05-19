@@ -20,3 +20,4 @@
 
 import './routes/tim'
 import './routes/pemain'
+import './routes/klasemen'
