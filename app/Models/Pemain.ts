@@ -1,5 +1,11 @@
 import { DateTime } from "luxon";
-import { BaseModel, BelongsTo, belongsTo, column } from "@ioc:Adonis/Lucid/Orm";
+import {
+  BaseModel,
+  BelongsTo,
+  belongsTo,
+  column,
+  computed,
+} from "@ioc:Adonis/Lucid/Orm";
 import Tim from "./Tim";
 
 export default class Pemain extends BaseModel {
@@ -64,4 +70,10 @@ export default class Pemain extends BaseModel {
     nickname: string;
     deskripsi: string;
   };
+  @computed()
+  public get links() {
+    return {
+      user: `https://auth-service.gosports.id/users/${this.userId}`,
+    };
+  }
 }
