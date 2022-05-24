@@ -1,6 +1,7 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Application from "@ioc:Adonis/Core/Application";
 import Pemain from "App/Models/Pemain";
+import DetailPemainBasket from "App/Models/DetailPemainBasket";
 
 export default class PemainsController {
   public async index({ request, response }: HttpContextContract) {
@@ -29,6 +30,10 @@ export default class PemainsController {
         instagram,
         youtube,
         tiktok,
+        cabor,
+        tinggiBadan,
+        beratBadan,
+        tempatLahir,
       } = request.body();
 
       const foto = request.file("foto", {
@@ -42,7 +47,7 @@ export default class PemainsController {
         new Date().getTime() + ""
       }.${foto?.extname}`;
 
-      return await Pemain.create({
+      const pemain = await Pemain.create({
         posisi: posisi,
         nomorPunggung: nomor_punggung,
         nickname: nickname,
@@ -56,13 +61,27 @@ export default class PemainsController {
         youtube: youtube,
         tiktok: tiktok,
       });
+
+      if (cabor == "basket") {
+        await DetailPemainBasket.create({
+          tinggiBadan,
+          beratBadan,
+          tempatLahir,
+          pemainId: pemain.id,
+        });
+      }
+
+      return { pemain };
     } catch (error) {
       return response.badRequest(error);
     }
   }
 
   public async show({ params: { id } }: HttpContextContract) {
-    return await Pemain.query().where({ id }).firstOrFail();
+    return await Pemain.query()
+      .where({ id })
+      .preload("detailPemainBasket")
+      .firstOrFail();
   }
 
   public async update({
@@ -81,6 +100,10 @@ export default class PemainsController {
         instagram,
         youtube,
         tiktok,
+        cabor,
+        tinggiBadan,
+        beratBadan,
+        tempatLahir,
       } = request.body();
 
       const foto = request.file("foto", {
@@ -93,6 +116,14 @@ export default class PemainsController {
       const fotoPemain = `${foto?.fileName?.toLowerCase()}-${
         new Date().getTime() + ""
       }.${foto?.extname}`;
+
+      if (cabor == "basket") {
+        await DetailPemainBasket.query().where({ pemainId: id }).update({
+          tinggiBadan,
+          beratBadan,
+          tempatLahir,
+        });
+      }
 
       return await Pemain.query()
         .where({ id })

@@ -5,8 +5,12 @@ import {
   belongsTo,
   column,
   computed,
+  HasOne,
+  hasOne,
 } from "@ioc:Adonis/Lucid/Orm";
+
 import Tim from "./Tim";
+import DetailPemainBasket from "./DetailPemainBasket";
 
 export default class Pemain extends BaseModel {
   @column({ isPrimary: true })
@@ -50,8 +54,12 @@ export default class Pemain extends BaseModel {
 
   @belongsTo(() => Tim, {
     localKey: "id",
+    foreignKey: "timId",
   })
   public tims: BelongsTo<typeof Tim>;
+
+  @hasOne(() => DetailPemainBasket, { localKey: "id", foreignKey: "pemainId" })
+  public detailPemainBasket: HasOne<typeof DetailPemainBasket>;
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
