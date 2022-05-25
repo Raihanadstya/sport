@@ -9,16 +9,12 @@ export default class PemainsController {
     try {
       const page = request.input("page", 1);
       return await Pemain.query().preload("tims").paginate(page, 50);
-
     } catch (error) {
       return response.notFound(error);
     }
   }
 
-  public async store({
-    request,
-    response,
-  }: HttpContextContract) {
+  public async store({ request, response }: HttpContextContract) {
     try {
       const {
         posisi,
@@ -31,13 +27,13 @@ export default class PemainsController {
         instagram,
         youtube,
         tiktok,
-        tinggi_badan,
-        berat_badan,
+        tinggiBadan,
+        beratBadan,
         pendidikan,
-        tempat_lahir,
+        tempatLahir,
         foot,
         cabor,
-        tim_id
+        tim_id,
       } = request.body();
 
       const foto = request.file("foto", {
@@ -67,26 +63,24 @@ export default class PemainsController {
       });
 
       if (cabor == "basket") {
-        
-
-        await DetailPemainFutsal.create({
-          tinggiBadan: tinggi_badan,
-          beratBadan: berat_badan,
-          tempatLahir: tempat_lahir,
-          pendidikan: pendidikan,
-          foot: foot,
-          pemainId: pemain.id
-        })
-      }else{
         await DetailPemainBasket.create({
-          tinggiBadan: tinggi_badan,
-          beratBadan: berat_badan,
-          tempatLahir: tempat_lahir,
+          tinggiBadan,
+          beratBadan,
+          tempatLahir,
+          pemainId: pemain.id,
+        });
+      } else {
+        await DetailPemainFutsal.create({
+          tinggiBadan,
+          beratBadan,
+          tempatLahir,
+          pendidikan,
+          foot,
           pemainId: pemain.id,
         });
       }
-      
-      return pemain;
+
+      return { pemain };
     } catch (error) {
       return response.badRequest(error);
     }
@@ -121,7 +115,7 @@ export default class PemainsController {
         beratBadan,
         tempatLahir,
         pendidikan,
-        foot
+        foot,
       } = request.body();
 
       const foto = request.file("foto", {
@@ -142,15 +136,15 @@ export default class PemainsController {
           tempatLahir,
         });
       }
-      const detailPemain = await DetailPemainFutsal.query().where({id})
-      if(detailPemain){
-        return await DetailPemainFutsal.query().where({id}).update({
+      const detailPemain = await DetailPemainFutsal.query().where({ id });
+      if (detailPemain) {
+        return await DetailPemainFutsal.query().where({ id }).update({
           tinggiBadan,
           beratBadan,
           tempatLahir,
           pendidikan,
-          foot
-        })
+          foot,
+        });
       }
 
       return await Pemain.query()

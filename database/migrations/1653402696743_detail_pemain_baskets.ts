@@ -1,9 +1,9 @@
-import BaseSchema from '@ioc:Adonis/Lucid/Schema'
+import BaseSchema from "@ioc:Adonis/Lucid/Schema";
 
 export default class DetailPemainBaskets extends BaseSchema {
-  protected tableName = 'detail_pemain_baskets'
+  protected tableName = "detail_pemain_baskets";
 
-  public async up () {
+  public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments("id");
       table.integer("tinggi_badan", 3);
@@ -16,10 +16,11 @@ export default class DetailPemainBaskets extends BaseSchema {
         .references("id")
         .inTable("pemains")
         .onDelete("CASCADE");
-    })
+      table.timestamps(true, true);
+    });
   }
 
-  public async down () {
-    this.schema.dropTable(this.tableName)
+  public async down() {
+    this.schema.dropTable(this.tableName);
   }
 }
