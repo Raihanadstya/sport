@@ -64,5 +64,5 @@ export default class Tim extends BaseModel {
   tim: { nama: string; asalInstansi: string; deskripsi: string | undefined };
 
   @hasMany(() => Pemain, { localKey: "id", foreignKey: "timId" })
-  public pemain: HasMany<typeof Pemain>;
+  public pemains: HasMany<typeof Pemain>;
 }

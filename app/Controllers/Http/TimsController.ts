@@ -3,11 +3,10 @@ import Application from "@ioc:Adonis/Core/Application";
 import Tim from "App/Models/Tim";
 
 export default class TimsController {
-  public async index({ request, response}: HttpContextContract) {
+  public async index({ request, response }: HttpContextContract) {
     try {
       const page = request.input("page", 1);
       return await Tim.query().where("dihapus", 0).paginate(page, 50);
-
     } catch (error) {
       return response.notFound(error);
     }
@@ -16,12 +15,11 @@ export default class TimsController {
   public async cabor({ request, response }: HttpContextContract) {
     try {
       const futsal = Tim.query().where("cabor", "futsal");
-      if(!futsal){
-        return Tim.query().where("cabor", "basket")
+      if (!futsal) {
+        return Tim.query().where("cabor", "basket");
       }
       const page = request.input("page", 1);
       return await Tim.query().where("dihapus", 0).paginate(page, 50);
-
     } catch (error) {
       return response.notFound(error);
     }
@@ -53,7 +51,7 @@ export default class TimsController {
         instagram,
         youtube,
         tiktok,
-        cabor
+        cabor,
       } = request.body();
       return await Tim.create({
         nama: nama_tim,
@@ -69,7 +67,7 @@ export default class TimsController {
         instagram: instagram,
         youtube: youtube,
         tiktok: tiktok,
-        cabor
+        cabor,
       });
     } catch (error) {
       return response.badRequest(error);
@@ -77,7 +75,7 @@ export default class TimsController {
   }
 
   public async show({ params: { id } }: HttpContextContract) {
-    return await Tim.query().preload("pemain").where({ id }).firstOrFail();
+    return await Tim.query().preload("pemains").where({ id }).firstOrFail();
   }
 
   public async update({

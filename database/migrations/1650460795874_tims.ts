@@ -21,7 +21,7 @@ export default class Tims extends BaseSchema {
       table.string("youtube");
       table.string("tiktok");
       table.boolean("dihapus").defaultTo(0);
-      table.string("cabor").notNullable();
+      table.string("cabor");
       table.timestamps(true, true);
     });
   }
