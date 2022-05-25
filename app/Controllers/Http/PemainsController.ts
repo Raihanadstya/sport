@@ -8,7 +8,7 @@ export default class PemainsController {
   public async index({ request, response }: HttpContextContract) {
     try {
       const page = request.input("page", 1);
-      return await Pemain.query().preload("tims").paginate(page, 50);
+      return await Pemain.query().paginate(page, 50);
     } catch (error) {
       return response.notFound(error);
     }

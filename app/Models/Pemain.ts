@@ -51,15 +51,15 @@ export default class Pemain extends BaseModel {
 
   @column()
   public tiktok: string;
-  
+
   @column()
   public detailPemainFutsalId: number;
 
   @belongsTo(() => Tim, {
     localKey: "id",
-    foreignKey: "timId"
+    foreignKey: "timId",
   })
-  public tims: BelongsTo<typeof Tim>;
+  public tim: BelongsTo<typeof Tim>;
 
   @hasOne(() => DetailPemainBasket, { localKey: "id", foreignKey: "pemainId" })
   public detailPemainBasket: HasOne<typeof DetailPemainBasket>;
@@ -88,6 +88,6 @@ export default class Pemain extends BaseModel {
     };
   }
 
-  @hasOne(()=> DetailPemainFutsal, {localKey:"id", foreignKey: "pemainId"})
-  public detailPemainFutsal: HasOne<typeof DetailPemainFutsal>
+  @hasOne(() => DetailPemainFutsal, { localKey: "id", foreignKey: "pemainId" })
+  public detailPemainFutsal: HasOne<typeof DetailPemainFutsal>;
 }
