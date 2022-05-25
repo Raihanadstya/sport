@@ -27,10 +27,10 @@ export default class PemainsController {
         instagram,
         youtube,
         tiktok,
-        tinggiBadan,
-        beratBadan,
+        tinggi_badan,
+        berat_badan,
+        tempat_lahir,
         pendidikan,
-        tempatLahir,
         foot,
         cabor,
         tim_id,
@@ -64,23 +64,23 @@ export default class PemainsController {
 
       if (cabor == "basket") {
         await DetailPemainBasket.create({
-          tinggiBadan,
-          beratBadan,
-          tempatLahir,
+          tinggiBadan: tinggi_badan,
+          beratBadan: berat_badan,
+          tempatLahir: tempat_lahir,
           pemainId: pemain.id,
         });
       } else {
         await DetailPemainFutsal.create({
-          tinggiBadan,
-          beratBadan,
-          tempatLahir,
-          pendidikan,
-          foot,
+          tinggiBadan: tinggi_badan,
+          beratBadan: berat_badan,
+          tempatLahir: tempat_lahir,
+          pendidikan: pendidikan,
+          foot: foot,
           pemainId: pemain.id,
         });
       }
 
-      return { pemain };
+      return pemain;
     } catch (error) {
       return response.badRequest(error);
     }
@@ -111,9 +111,9 @@ export default class PemainsController {
         youtube,
         tiktok,
         cabor,
-        tinggiBadan,
-        beratBadan,
-        tempatLahir,
+        tinggi_badan,
+        berat_badan,
+        tempat_lahir,
         pendidikan,
         foot,
       } = request.body();
@@ -129,38 +129,38 @@ export default class PemainsController {
         new Date().getTime() + ""
       }.${foto?.extname}`;
 
+      const pemain = await Pemain.query()
+      .where({ id })
+      .update({
+        posisi: posisi,
+        nomorPunggung: nomor_punggung,
+        nickname: nickname,
+        deskripsi: deskripsi,
+        foto: `foto/fotoPemain/${fotoPemain}`,
+        facebook: facebook,
+        twitter: twitter,
+        instagram: instagram,
+        youtube: youtube,
+        tiktok: tiktok,
+      });
+
       if (cabor == "basket") {
-        await DetailPemainBasket.query().where({ pemainId: id }).update({
-          tinggiBadan,
-          beratBadan,
-          tempatLahir,
+        await DetailPemainBasket.query().where({ id }).update({
+          tinggiBadan: tinggi_badan,
+          beratBadan: berat_badan,
+          tempatLahir: tempat_lahir,
         });
-      }
-      const detailPemain = await DetailPemainFutsal.query().where({ id });
-      if (detailPemain) {
-        return await DetailPemainFutsal.query().where({ id }).update({
-          tinggiBadan,
-          beratBadan,
-          tempatLahir,
-          pendidikan,
-          foot,
+      } else {
+        await DetailPemainFutsal.query().where({ id }).update({
+          tinggiBadan: tinggi_badan,
+          beratBadan: berat_badan,
+          tempatLahir: tempat_lahir,
+          pendidikan: pendidikan,
+          foot: foot,
         });
       }
 
-      return await Pemain.query()
-        .where({ id })
-        .update({
-          posisi: posisi,
-          nomorPunggung: nomor_punggung,
-          nickname: nickname,
-          deskripsi: deskripsi,
-          foto: `foto/fotoPemain/${fotoPemain}`,
-          facebook: facebook,
-          twitter: twitter,
-          instagram: instagram,
-          youtube: youtube,
-          tiktok: tiktok,
-        });
+      return pemain;
     } catch (error) {
       return response.notFound(error);
     }

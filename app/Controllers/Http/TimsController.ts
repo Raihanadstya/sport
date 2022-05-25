@@ -12,19 +12,6 @@ export default class TimsController {
     }
   }
 
-  public async cabor({ request, response }: HttpContextContract) {
-    try {
-      const futsal = Tim.query().where("cabor", "futsal");
-      if (!futsal) {
-        return Tim.query().where("cabor", "basket");
-      }
-      const page = request.input("page", 1);
-      return await Tim.query().where("dihapus", 0).paginate(page, 50);
-    } catch (error) {
-      return response.notFound(error);
-    }
-  }
-
   public async store({ request, response }: HttpContextContract) {
     try {
       const logoTim = request.file("logo", {
