@@ -8,9 +8,9 @@ import {
   HasOne,
   hasOne,
 } from "@ioc:Adonis/Lucid/Orm";
-
-import Tim from "./Tim";
+import DetailPemainFutsal from "./DetailPemainFutsal";
 import DetailPemainBasket from "./DetailPemainBasket";
+import Tim from "./Tim";
 
 export default class Pemain extends BaseModel {
   @column({ isPrimary: true })
@@ -51,10 +51,13 @@ export default class Pemain extends BaseModel {
 
   @column()
   public tiktok: string;
+  
+  @column()
+  public detailPemainFutsalId: number;
 
   @belongsTo(() => Tim, {
     localKey: "id",
-    foreignKey: "timId",
+    foreignKey: "timId"
   })
   public tims: BelongsTo<typeof Tim>;
 
@@ -84,4 +87,7 @@ export default class Pemain extends BaseModel {
       user: `https://auth-service.gosports.id/users/${this.userId}`,
     };
   }
+
+  @hasOne(()=> DetailPemainFutsal, {localKey:"id", foreignKey: "pemainId"})
+  public detailPemainFutsal: HasOne<typeof DetailPemainFutsal>
 }

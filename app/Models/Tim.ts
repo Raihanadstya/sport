@@ -48,10 +48,8 @@ export default class Tim extends BaseModel {
   @column()
   public tiktok: string;
 
-  @hasMany(() => Pemain, {
-    foreignKey: "id",
-  })
-  public pemains: HasMany<typeof Pemain>;
+  @column()
+  public cabor: string;
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;

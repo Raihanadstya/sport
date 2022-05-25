@@ -2,12 +2,14 @@ import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Application from "@ioc:Adonis/Core/Application";
 import Pemain from "App/Models/Pemain";
 import DetailPemainBasket from "App/Models/DetailPemainBasket";
+import DetailPemainFutsal from "App/Models/DetailPemainFutsal";
 
 export default class PemainsController {
   public async index({ request, response }: HttpContextContract) {
     try {
       const page = request.input("page", 1);
-      return await Pemain.query().paginate(page, 50);
+      return await Pemain.query().preload("tims").paginate(page, 50);
+
     } catch (error) {
       return response.notFound(error);
     }
@@ -16,7 +18,6 @@ export default class PemainsController {
   public async store({
     request,
     response,
-    params: { tim_id },
   }: HttpContextContract) {
     try {
       const {
@@ -30,10 +31,13 @@ export default class PemainsController {
         instagram,
         youtube,
         tiktok,
+        tinggi_badan,
+        berat_badan,
+        pendidikan,
+        tempat_lahir,
+        foot,
         cabor,
-        tinggiBadan,
-        beratBadan,
-        tempatLahir,
+        tim_id
       } = request.body();
 
       const foto = request.file("foto", {
@@ -63,15 +67,26 @@ export default class PemainsController {
       });
 
       if (cabor == "basket") {
+        
+
+        await DetailPemainFutsal.create({
+          tinggiBadan: tinggi_badan,
+          beratBadan: berat_badan,
+          tempatLahir: tempat_lahir,
+          pendidikan: pendidikan,
+          foot: foot,
+          pemainId: pemain.id
+        })
+      }else{
         await DetailPemainBasket.create({
-          tinggiBadan,
-          beratBadan,
-          tempatLahir,
+          tinggiBadan: tinggi_badan,
+          beratBadan: berat_badan,
+          tempatLahir: tempat_lahir,
           pemainId: pemain.id,
         });
       }
-
-      return { pemain };
+      
+      return pemain;
     } catch (error) {
       return response.badRequest(error);
     }
@@ -81,6 +96,7 @@ export default class PemainsController {
     return await Pemain.query()
       .where({ id })
       .preload("detailPemainBasket")
+      .preload("detailPemainFutsal")
       .firstOrFail();
   }
 
@@ -104,6 +120,8 @@ export default class PemainsController {
         tinggiBadan,
         beratBadan,
         tempatLahir,
+        pendidikan,
+        foot
       } = request.body();
 
       const foto = request.file("foto", {
@@ -123,6 +141,16 @@ export default class PemainsController {
           beratBadan,
           tempatLahir,
         });
+      }
+      const detailPemain = await DetailPemainFutsal.query().where({id})
+      if(detailPemain){
+        return await DetailPemainFutsal.query().where({id}).update({
+          tinggiBadan,
+          beratBadan,
+          tempatLahir,
+          pendidikan,
+          foot
+        })
       }
 
       return await Pemain.query()
