@@ -21,16 +21,16 @@ export default class PemainsController {
         nomor_punggung,
         nickname,
         deskripsi,
-        user_id,
+        userId,
         facebook,
         twitter,
         instagram,
         youtube,
         tiktok,
-        tinggi_badan,
-        berat_badan,
-        tempat_lahir,
+        tinggiBadan,
+        beratBadan,
         pendidikan,
+        tempatLahir,
         foot,
         cabor,
         tim_id,
@@ -41,7 +41,7 @@ export default class PemainsController {
         extnames: ["jpg", "png", "jpeg", "svg"],
       });
 
-      await foto?.move(Application.publicPath("foto/fotoPemain"));
+      await foto?.move(Application.publicPath("foto/foto-pemain"));
 
       const fotoPemain = `${foto?.fileName?.toLowerCase()}-${
         new Date().getTime() + ""
@@ -52,9 +52,9 @@ export default class PemainsController {
         nomorPunggung: nomor_punggung,
         nickname: nickname,
         deskripsi: deskripsi,
-        userId: user_id,
+        userId: userId,
         timId: tim_id,
-        foto: `foto/fotoPemain/${fotoPemain}`,
+        foto: `foto/foto-pemain/${fotoPemain}`,
         facebook: facebook,
         twitter: twitter,
         instagram: instagram,
@@ -64,18 +64,18 @@ export default class PemainsController {
 
       if (cabor == "basket") {
         await DetailPemainBasket.create({
-          tinggiBadan: tinggi_badan,
-          beratBadan: berat_badan,
-          tempatLahir: tempat_lahir,
+          tinggiBadan,
+          beratBadan,
+          tempatLahir,
           pemainId: pemain.id,
         });
       } else {
         await DetailPemainFutsal.create({
-          tinggiBadan: tinggi_badan,
-          beratBadan: berat_badan,
-          tempatLahir: tempat_lahir,
-          pendidikan: pendidikan,
-          foot: foot,
+          tinggiBadan,
+          beratBadan,
+          tempatLahir,
+          pendidikan,
+          foot,
           pemainId: pemain.id,
         });
       }
@@ -111,9 +111,9 @@ export default class PemainsController {
         youtube,
         tiktok,
         cabor,
-        tinggi_badan,
-        berat_badan,
-        tempat_lahir,
+        tinggiBadan,
+        beratBadan,
+        tempatLahir,
         pendidikan,
         foot,
       } = request.body();
@@ -123,44 +123,44 @@ export default class PemainsController {
         extnames: ["jpg", "png", "jpeg", "svg"],
       });
 
-      await foto?.move(Application.publicPath("foto/fotoPemain"));
+      await foto?.move(Application.publicPath("foto/foto-pemain"));
 
       const fotoPemain = `${foto?.fileName?.toLowerCase()}-${
         new Date().getTime() + ""
       }.${foto?.extname}`;
 
-      const pemain = await Pemain.query()
-      .where({ id })
-      .update({
-        posisi: posisi,
-        nomorPunggung: nomor_punggung,
-        nickname: nickname,
-        deskripsi: deskripsi,
-        foto: `foto/fotoPemain/${fotoPemain}`,
-        facebook: facebook,
-        twitter: twitter,
-        instagram: instagram,
-        youtube: youtube,
-        tiktok: tiktok,
-      });
-
       if (cabor == "basket") {
-        await DetailPemainBasket.query().where({ id }).update({
-          tinggiBadan: tinggi_badan,
-          beratBadan: berat_badan,
-          tempatLahir: tempat_lahir,
+        await DetailPemainBasket.query().where({ pemainId: id }).update({
+          tinggiBadan,
+          beratBadan,
+          tempatLahir,
         });
-      } else {
-        await DetailPemainFutsal.query().where({ id }).update({
-          tinggiBadan: tinggi_badan,
-          beratBadan: berat_badan,
-          tempatLahir: tempat_lahir,
-          pendidikan: pendidikan,
-          foot: foot,
+      }
+      const detailPemain = await DetailPemainFutsal.query().where({ id });
+      if (detailPemain) {
+        return await DetailPemainFutsal.query().where({ id }).update({
+          tinggiBadan,
+          beratBadan,
+          tempatLahir,
+          pendidikan,
+          foot,
         });
       }
 
-      return pemain;
+      return await Pemain.query()
+        .where({ id })
+        .update({
+          posisi: posisi,
+          nomorPunggung: nomor_punggung,
+          nickname: nickname,
+          deskripsi: deskripsi,
+          foto: `foto/foto-pdemain/${fotoPemain}`,
+          facebook: facebook,
+          twitter: twitter,
+          instagram: instagram,
+          youtube: youtube,
+          tiktok: tiktok,
+        });
     } catch (error) {
       return response.notFound(error);
     }
