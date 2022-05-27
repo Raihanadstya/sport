@@ -27,6 +27,7 @@ export default class TimsController {
 
       const {
         nama_tim,
+        nama_tebal,
         asal_instansi,
         deskripsi,
         user_id,
@@ -42,10 +43,11 @@ export default class TimsController {
       } = request.body();
       return await Tim.create({
         nama: nama_tim,
+        namaTebal: nama_tebal,
         asalInstansi: asal_instansi,
         deskripsi: deskripsi,
         userId: user_id,
-        logo: `foto/logoTim/${logo}`,
+        logo: `foto/logo-tim/${logo}`,
         provinsi: provinsi,
         wilayah: wilayah,
         website: website,
@@ -54,7 +56,7 @@ export default class TimsController {
         instagram: instagram,
         youtube: youtube,
         tiktok: tiktok,
-        cabor,
+        cabor: cabor,
       });
     } catch (error) {
       return response.badRequest(error);
@@ -82,6 +84,7 @@ export default class TimsController {
 
       const {
         nama_tim,
+        nama_tebal,
         asal_instansi,
         deskripsi,
         user_id,
@@ -93,11 +96,13 @@ export default class TimsController {
         instagram,
         youtube,
         tiktok,
+        cabor,
       } = request.body();
       return await Tim.query()
         .where({ id })
         .update({
           nama: nama_tim,
+          namaTebal: nama_tebal,
           asalInstansi: asal_instansi,
           deskripsi: deskripsi,
           userId: user_id,
@@ -110,6 +115,7 @@ export default class TimsController {
           instagram: instagram,
           youtube: youtube,
           tiktok: tiktok,
+          cabor: cabor,
         });
     } catch (error) {
       return response.notFound(error);
