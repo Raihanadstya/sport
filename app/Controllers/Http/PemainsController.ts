@@ -41,7 +41,7 @@ export default class PemainsController {
         extnames: ["jpg", "png", "jpeg", "svg"],
       });
 
-      await foto?.move(Application.publicPath("foto/foto-pemain"));
+      await foto?.move(Application.publicPath("img/pemain"));
 
       const fotoPemain = `${foto?.fileName?.toLowerCase()}-${
         new Date().getTime() + ""
@@ -54,7 +54,7 @@ export default class PemainsController {
         deskripsi: deskripsi,
         userId: userId,
         timId: tim_id,
-        foto: `foto/foto-pemain/${fotoPemain}`,
+        foto: `img/pemain/${fotoPemain}`,
         facebook: facebook,
         twitter: twitter,
         instagram: instagram,
@@ -123,11 +123,26 @@ export default class PemainsController {
         extnames: ["jpg", "png", "jpeg", "svg"],
       });
 
-      await foto?.move(Application.publicPath("foto/foto-pemain"));
+      await foto?.move(Application.publicPath("img/pemain"));
 
       const fotoPemain = `${foto?.fileName?.toLowerCase()}-${
         new Date().getTime() + ""
       }.${foto?.extname}`;
+
+      const pemain = await Pemain.query()
+      .where({ id })
+      .update({
+        posisi: posisi,
+        nomorPunggung: nomor_punggung,
+        nickname: nickname,
+        deskripsi: deskripsi,
+        foto: `img/pemain/${fotoPemain}`,
+        facebook: facebook,
+        twitter: twitter,
+        instagram: instagram,
+        youtube: youtube,
+        tiktok: tiktok,
+      });
 
       if (cabor == "basket") {
         await DetailPemainBasket.query().where({ pemainId: id }).update({
@@ -147,20 +162,7 @@ export default class PemainsController {
         });
       }
 
-      return await Pemain.query()
-        .where({ id })
-        .update({
-          posisi: posisi,
-          nomorPunggung: nomor_punggung,
-          nickname: nickname,
-          deskripsi: deskripsi,
-          foto: `foto/foto-pdemain/${fotoPemain}`,
-          facebook: facebook,
-          twitter: twitter,
-          instagram: instagram,
-          youtube: youtube,
-          tiktok: tiktok,
-        });
+      return pemain;
     } catch (error) {
       return response.notFound(error);
     }

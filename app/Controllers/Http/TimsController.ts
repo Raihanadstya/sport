@@ -19,7 +19,7 @@ export default class TimsController {
         extnames: ["jpg", "png", "jpeg", "svg"],
       });
 
-      await logoTim?.move(Application.publicPath("foto/logoTim"));
+      await logoTim?.move(Application.publicPath("img/logo-tim"));
 
       const logo = `${logoTim?.fileName?.toLowerCase()}-${
         new Date().getTime() + ""
@@ -47,7 +47,7 @@ export default class TimsController {
         asalInstansi: asal_instansi,
         deskripsi: deskripsi,
         userId: user_id,
-        logo: `foto/logo-tim/${logo}`,
+        logo: `img/logo-tim/${logo}`,
         provinsi: provinsi,
         wilayah: wilayah,
         website: website,
@@ -77,7 +77,7 @@ export default class TimsController {
         size: "2mb",
         extnames: ["jpg", "gif", "png"],
       });
-      await logoTim?.move(Application.publicPath("foto/logoTim"));
+      await logoTim?.move(Application.publicPath("img/logo-tim"));
       const logo = `${logoTim?.fileName?.toLowerCase()}-${
         new Date().getTime() + ""
       }.${logoTim?.extname}`;
@@ -106,7 +106,7 @@ export default class TimsController {
           asalInstansi: asal_instansi,
           deskripsi: deskripsi,
           userId: user_id,
-          logo: `foto/logoTim/${logo}`,
+          logo: `img/logo-tim/${logo}`,
           provinsi: provinsi,
           wilayah: wilayah,
           website: website,
