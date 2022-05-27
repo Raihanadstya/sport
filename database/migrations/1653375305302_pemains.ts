@@ -6,10 +6,10 @@ export default class Pemains extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments("id").primary();
-      table.string("posisi", 50).notNullable();
-      table.string("nomor_punggung", 3).notNullable();
-      table.string("nickname").notNullable();
-      table.string("deskripsi").notNullable();
+      table.string("posisi", 50);
+      table.string("nomor_punggung", 3);
+      table.string("nickname");
+      table.string("deskripsi");
       table.text("foto").nullable();
       table.integer("user_id").unsigned().notNullable();
       table
